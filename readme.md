@@ -15,11 +15,21 @@ osongina konfiguratsion http klient orqali autentifikatsiya qilish tizimini yozi
 
 ## O'rnatish
 
-Quyidagi konfiguratsion qismni Cargo.toml fayliga joylashtiring:
+Eng oxirgi reliz artifaktdan shu yerdan ko'chirib olishingiz kerak bo'ladi:
+https://github.com/uzinfocom-org/maestro/releases. Keyin esa:
 
-```toml
-[dependencies]
-korrektor = "0.1.0"
+```shell
+# Yordam uchun
+./maestro --help
+
+# Config faylni yaratib olish
+./maestro create
+
+# Config bilan amalga oshirish
+./maestro config <config file>
+
+# Qo'lda terilgan holda
+./maestro credentials <username> <password>
 ```
 
 ## Litsenziya
