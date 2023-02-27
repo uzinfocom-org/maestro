@@ -21,6 +21,9 @@ pub enum Commands {
     /// Login via credential
     #[command(arg_required_else_help = true)]
     Credentials {
+        /// URL of the kerio control panel
+        url: String,
+        
         /// The remote to target
         login: String,
 

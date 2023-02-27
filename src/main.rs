@@ -24,16 +24,16 @@ fn main() {
             };
 
             let mut instance = http::Instance::new();
-            instance.login(data.login, data.password)
+            instance.login(data.url, data.login, data.password)
         }
-        Commands::Credentials { login, password } => {
-            if login.is_empty() || password.is_empty() {
-                eprintln!("Login or password can't be empty");
+        Commands::Credentials { url, login, password } => {
+            if login.is_empty() || password.is_empty() || url.is_empty() {
+                eprintln!("None of url, login or password can't be empty");
                 exit(1)
             }
 
             let mut instance = http::Instance::new();
-            instance.login(login, password)
+            instance.login(url, login, password)
         }
         Commands::Create => {
             // Create example config file in current directory using template

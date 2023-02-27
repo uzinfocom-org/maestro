@@ -13,6 +13,7 @@ pub struct Data {
 // Config struct holds to data from the `[config]` section.
 #[derive(Deserialize)]
 pub struct Config {
+    pub url: String,
     pub login: String,
     pub password: String,
 }
