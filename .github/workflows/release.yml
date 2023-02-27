@@ -1,6 +1,6 @@
 name: Build & Publish Executable
 env:
-  BIN: maid-felix
+  BIN: maestro
 
 on:
   push:
