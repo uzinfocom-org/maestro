@@ -1,3 +1,37 @@
+mod args;
+mod config;
+mod http;
+
+use args::{Cli, Commands};
+use clap::Parser;
+use std::path::Path;
+use std::process::exit;
+
 fn main() {
-    println!("Hello, maestro!");
+    let args = Cli::parse();
+
+    match args.command {
+        Commands::Config { file } => {
+            let location = Path::new(&file);
+
+            let data = if location.exists() {
+                config::Data::new(location.to_path_buf()).config
+            } else {
+                eprintln!("File does not exist");
+                exit(1)
+            };
+
+            let mut instance = http::Instance::new();
+            instance.login(data.login, data.password)
+        }
+        Commands::Credentials { login, password } => {
+            if login.is_empty() || password.is_empty() {
+                eprintln!("Login or password can't be empty");
+                exit(1)
+            }
+
+            let mut instance = http::Instance::new();
+            instance.login(login, password)
+        }
+    }
 }

@@ -17,3 +17,6 @@ Cargo.lock
 
 # Mac files
 .DS_Store
+
+# Config file
+config.toml
