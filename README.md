@@ -1,2 +1,2 @@
-# maestro
-A synchronising deploy manager which will help system administrators to automate deployments via git webhooks
+# Maestro
+🎼 | A synchronising auth manager which handles auto login for UIC-GW
