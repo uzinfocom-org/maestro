@@ -7,6 +7,8 @@ use clap::Parser;
 use std::path::Path;
 use std::process::exit;
 
+static TEMPLATE: &str = include_str!("../example.config.toml");
+
 fn main() {
     let args = Cli::parse();
 
@@ -32,6 +34,20 @@ fn main() {
 
             let mut instance = http::Instance::new();
             instance.login(login, password)
+        }
+        Commands::Create => {
+            // Create example config file in current directory using template
+            let location = Path::new("example.config.toml");
+            
+            match location.exists() {
+                true => {
+                    eprintln!("File already exists");
+                    exit(1)
+                }
+                false => {
+                    std::fs::write(location, TEMPLATE).unwrap();
+                }
+            }
         }
     }
 }

@@ -27,4 +27,7 @@ pub enum Commands {
         /// Given password for the account
         password: String,
     },
+    
+    /// Create example config file
+    Create
 }
