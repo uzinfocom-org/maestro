@@ -1,53 +1,47 @@
 name: Build & Release binaries
+
+permissions:
+  contents: write
+
 on:
   push:
     tags:
-      - 'v*'
+      - v[0-9]+.*
 
 jobs:
-  release:
-    name: Create Release
+  create-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@master
-      - name: Create Release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
+      - uses: taiki-e/create-gh-release-action@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
-          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-  publish:
-    name: publish ${{ matrix.name }}
-    needs:
-      - release
+  upload-assets:
     strategy:
-      fail-fast: true
       matrix:
         include:
-          - target: x86_64-pc-windows-gnu
-            suffix: windows-x86_64
-            archive: zip
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-latest
+          - target: aarch64-apple-darwin
+            os: macos-latest
           - target: x86_64-unknown-linux-gnu
-            suffix: linux-x86_64
-            archive: tar.xz
+            os: ubuntu-latest
           - target: x86_64-apple-darwin
-            suffix: darwin-x86_64
-            archive: tar.gz
-    runs-on: ubuntu-latest
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Clone test repository
-        uses: actions/checkout@v2
-      - uses: xhaiker/rust-release.action@v1.0.0
-        name: build ${{ matrix.name }}
+      - uses: actions/checkout@v3
+      - name: Install cross-compilation tools
+        uses: taiki-e/setup-cross-toolchain-action@v1
         with:
-          release: ${{ github.ref_name }}
-          rust_target: ${{ matrix.target }}
-          archive_suffix: ${{ matrix.suffix }}
-          archive_types: ${{ matrix.archive }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          target: ${{ matrix.target }}
+        if: startsWith(matrix.os, 'ubuntu')
+      - uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          # (required) Comma-separated list of binary names (non-extension portion of filename) to build and upload.
+          bin: maestro
+          # (optional) Target triple, default is host triple.
+          target: ${{ matrix.target }}
+          # (required) GitHub token for uploading assets to GitHub Releases.
+          token: ${{ secrets.GITHUB_TOKEN }}
