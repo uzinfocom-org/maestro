@@ -29,7 +29,7 @@ https://github.com/uzinfocom-org/maestro/releases. Keyin esa:
 ./maestro config <config file>
 
 # Qo'lda terilgan holda
-./maestro credentials <username> <password>
+./maestro credentials <url> <username> <password>
 ```
 
 ## Litsenziya
